@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -31,11 +30,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   double _counterProgress = 0;
+  bool _progressDone = false;
+
   void startPogress() {
     Timer.periodic(Duration(milliseconds: 300), (Timer t) {
       setState(() {
         if (_counterProgress.toStringAsFixed(1) == '1.0') {
           t.cancel();
+          _progressDone = true;
           return;
         }
         _counterProgress += 0.1;
@@ -71,13 +73,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       backgroundColor: MaterialStateProperty.all(Colors.blue)),
                   onPressed: startPogress,
                   child: Text(
-                    _counterProgress.toStringAsFixed(1) == '1.0'
-                        ? 'Done'
-                        : 'Start',
+                    _progressDone ? 'Done' : 'Start',
                     style: TextStyle(color: Colors.white),
                   )),
               AnimatedOpacity(
-                opacity: _counterProgress.toStringAsFixed(1) == '1.0' ? 1 : 0,
+                opacity: _progressDone ? 1 : 0,
                 duration: const Duration(seconds: 1),
                 child: Icon(
                   Icons.done,
@@ -88,6 +88,19 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: AnimatedOpacity(
+        opacity: _progressDone ? 1 : 0,
+        duration: const Duration(seconds: 1),
+        child: _progressDone
+            ? FloatingActionButton(
+                child: Icon(Icons.restart_alt),
+                onPressed: () => setState(() {
+                  _counterProgress = 0;
+                  _progressDone = false;
+                }),
+              )
+            : null,
       ),
     );
   }
