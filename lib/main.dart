@@ -32,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   double _counterProgress = 0;
   void startPogress() {
-    Timer.periodic(Duration(seconds: 1), (Timer t) {
+    Timer.periodic(Duration(milliseconds: 300), (Timer t) {
       setState(() {
         if (_counterProgress.toStringAsFixed(1) == '1.0') {
           t.cancel();
@@ -75,7 +75,16 @@ class _MyHomePageState extends State<MyHomePage> {
                         ? 'Done'
                         : 'Start',
                     style: TextStyle(color: Colors.white),
-                  ))
+                  )),
+              AnimatedOpacity(
+                opacity: _counterProgress.toStringAsFixed(1) == '1.0' ? 1 : 0,
+                duration: const Duration(seconds: 1),
+                child: Icon(
+                  Icons.done,
+                  color: Colors.green,
+                  size: 32,
+                ),
+              ),
             ],
           ),
         ),
